@@ -23,7 +23,10 @@ then close rviz and slam toolbox and change mapping to localization in the mappe
 
 re run both slam toolbox and rviz2 and set fixed frame to map and subscribe to /map topic and also change durability policy under topic to transient local
 
-this brings up our loaded map and we can proceed to localization   
+this brings up our loaded map and we can proceed to localization, run - 
+ros2 launch slam_toolbox localization_launch.py slam_params_file:=./src/complete_bot/config/mapper_params_online_async.yaml use_sim_time:=true
+
+
 
 twist mux and autonomous navigation using nav2 -  
 launch gazebo and rviz2 normally 
@@ -36,3 +39,21 @@ ros2 launch nav2_bringup navigation_launch.py use_sim_time:=true
 ros2 launch slam_toolbox online_async_launch.py slam_params_file:=./src/complete_bot/config/mapper_params_online_async.yaml use_sim_time:=true
 
 and add map plugins, add /global_costmap as topic and set to transient local in durability and then give 2d goal pose, the bot will autonomously navigate to the given point.
+
+
+NAV2 WITH AMCL
+ros2 launch nav2_bringup localization_launch.py map:=./map_save.yaml use_sim_time:=true
+
+ros2 launch nav2_bringup navigation_launch.py use_sim_time:=true map_subscribe_transient_local:=true
+
+
+
+NAV2 with files in our package - 
+ros2 launch complete_bot online_async_launch.py slam_params_file:=./src/complete_bot/config/mapper_params_online_async.yaml use_sim_time:=true
+
+ros2 launch complete_bot navigation_launch.py use_sim_time:=true
+
+ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/cmd_vel_joy
+
+
+
